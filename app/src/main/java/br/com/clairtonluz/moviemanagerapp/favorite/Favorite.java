@@ -1,5 +1,7 @@
-package br.com.clairtonluz.moviemanagerapp.movie;
+package br.com.clairtonluz.moviemanagerapp.favorite;
 
+
+import br.com.clairtonluz.moviemanagerapp.movie.Movie;
 
 public class Favorite {
     private Integer id;

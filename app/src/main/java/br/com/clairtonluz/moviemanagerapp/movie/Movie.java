@@ -5,18 +5,12 @@ import java.util.List;
 public class Movie {
     private Integer id;
     private String name;
+    private String urlImage;
     private String description;
     private List<Type> types;
     private Integer year;
-    private int thumbnail;
 
     public Movie() {
-    }
-
-    public Movie(String name, String description, int thumbnail) {
-        this.name = name;
-        this.thumbnail = thumbnail;
-        this.description = description;
     }
 
     public String getName() {
@@ -25,14 +19,6 @@ public class Movie {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public Integer getId() {
@@ -65,5 +51,13 @@ public class Movie {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public String getUrlImage() {
+        return urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 }

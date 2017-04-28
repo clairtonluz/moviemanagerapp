@@ -4,24 +4,34 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.movie.Movie;
+import br.com.clairtonluz.moviemanagerapp.movie.MovieService;
 import br.com.clairtonluz.moviemanagerapp.movie.MoviesAdapter;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private MovieService movieService;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -30,6 +40,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        movieService = new MovieService(getContext());
     }
 
     @Override
@@ -39,6 +50,7 @@ public class HomeFragment extends Fragment {
 
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
         movieList = new ArrayList<>();
         adapter = new MoviesAdapter(getContext(), movieList);
@@ -49,35 +61,65 @@ public class HomeFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                prepareMovies();
+            }
+        });
+
         prepareMovies();
         return view;
     }
 
     private void prepareMovies() {
-        int[] covers = new int[]{
-                R.drawable.suicide_squad,
-                R.drawable.thor_ragnarok
-        };
+        movieList.clear();
+        movieService.list().enqueue(new Callback<List<Movie>>() {
+            @Override
+            public void onResponse(Call<List<Movie>> call, Response<List<Movie>> response) {
+                Log.e("teste", "response");
+                if (response.isSuccessful()) {
+                    movieList.addAll(response.body());
+                } else {
+                    Toast.makeText(getContext(), "Ocorreu uma falha!", Toast.LENGTH_LONG);
+                }
 
-        String description1 = "Um time dos mais perigosos e encarcerados supervilões são contratados por uma agência secreta do governo, para combater uma poderosa entidade. No entanto, quando eles percebem que não foram escolhidos apenas para ter sucesso, mas também por sua óbvia culpa quando inevitavelmente falharem, terão que decidir se vale a pena ou não continuar correndo risco de morte.";
-        String description2 = "Thor: Ragnarok é um futuro filme americano de ação, fantasia e aventura, baseado no herói homônimo da Marvel Comics criado por Jack Kirby, Stan Lee e Larry Lieber. O filme é dirigido por Taika Waititi, com base no roteiro de Stephany Folsom.";
-        Movie a = new Movie("Esquadrão Suicida", description1, covers[0]);
-        Movie b = new Movie("Thor Ragnarok", description2, covers[1]);
-        movieList.add(a);
-        movieList.add(b);
-        movieList.add(a);
-        movieList.add(b);
-        movieList.add(a);
-        movieList.add(b);
-        movieList.add(a);
-        movieList.add(b);
-        movieList.add(a);
-        movieList.add(b);
-        movieList.add(a);
-        movieList.add(b);
+                adapter.notifyDataSetChanged();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<List<Movie>> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(getContext(), t.getLocalizedMessage(), Toast.LENGTH_LONG);
+                mSwipeRefreshLayout.setRefreshing(false);
+                adapter.notifyDataSetChanged();
+            }
+
+        });
+//        int[] covers = new int[]{
+//                R.drawable.suicide_squad,
+//                R.drawable.thor_ragnarok
+//        };
+//
+//        String description1 = "Um time dos mais perigosos e encarcerados supervilões são contratados por uma agência secreta do governo, para combater uma poderosa entidade. No entanto, quando eles percebem que não foram escolhidos apenas para ter sucesso, mas também por sua óbvia culpa quando inevitavelmente falharem, terão que decidir se vale a pena ou não continuar correndo risco de morte.";
+//        String description2 = "Thor: Ragnarok é um futuro filme americano de ação, fantasia e aventura, baseado no herói homônimo da Marvel Comics criado por Jack Kirby, Stan Lee e Larry Lieber. O filme é dirigido por Taika Waititi, com base no roteiro de Stephany Folsom.";
+//        Movie a = new Movie("Esquadrão Suicida", description1, covers[0]);
+//        Movie b = new Movie("Thor Ragnarok", description2, covers[1]);
+//        movieList.add(a);
+//        movieList.add(b);
+//        movieList.add(a);
+//        movieList.add(b);
+//        movieList.add(a);
+//        movieList.add(b);
+//        movieList.add(a);
+//        movieList.add(b);
+//        movieList.add(a);
+//        movieList.add(b);
+//        movieList.add(a);
+//        movieList.add(b);
 
 
-        adapter.notifyDataSetChanged();
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

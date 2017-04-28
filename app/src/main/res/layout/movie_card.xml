@@ -38,26 +38,26 @@
                 android:textSize="@dimen/movie_title" />
 
             <TextView
-                android:id="@+id/count"
+                android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
+                android:paddingTop="@dimen/description_padding_top"
                 android:paddingBottom="@dimen/description_padding_bottom"
                 android:paddingLeft="@dimen/movie_title_padding"
                 android:paddingRight="@dimen/movie_title_padding"
                 android:textSize="@dimen/description_text" />
 
             <ImageView
-                android:id="@+id/overflow"
-                android:layout_width="@dimen/ic_movie_overflow_width"
-                android:layout_height="@dimen/ic_movie_overflow_height"
+                android:id="@+id/favorite"
+                android:layout_width="@dimen/ic_favorite_size"
+                android:layout_height="@dimen/ic_favorite_size"
                 android:layout_alignParentRight="true"
                 android:layout_below="@id/thumbnail"
-                android:tint="@android:color/darker_gray"
-                android:layout_marginLeft="@dimen/ic_movie_overflow_margin_left"
-                android:layout_marginTop="@dimen/ic_movie_overflow_margin_top"
+                android:layout_margin="@dimen/ic_movie_overflow_margin"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_more_vert_black_24dp" />
+                android:tint="@android:color/darker_gray"
+                app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
         </RelativeLayout>
 
