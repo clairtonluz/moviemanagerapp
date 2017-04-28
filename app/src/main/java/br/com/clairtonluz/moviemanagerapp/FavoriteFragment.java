@@ -2,32 +2,122 @@ package br.com.clairtonluz.moviemanagerapp;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import br.com.clairtonluz.moviemanagerapp.config.GridSpacingItemDecoration;
+import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
+import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
+import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteService;
+import br.com.clairtonluz.moviemanagerapp.movie.Movie;
+import br.com.clairtonluz.moviemanagerapp.movie.MoviesAdapter;
+import br.com.clairtonluz.moviemanagerapp.util.ConverterUtil;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FavoriteFragment extends Fragment {
+    public class FavoriteFragment extends Fragment {
 
+    private RecyclerView recyclerView;
+    private MoviesAdapter adapter;
+    private List<Movie> movieList;
+    private List<Favorite> favoriteList;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private FavoriteService favoriteService;
 
     public FavoriteFragment() {
         // Required empty public constructor
     }
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        favoriteService = new FavoriteService(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_favorite, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
+        initFields(view);
+        setListeners();
+        prepareFavorites();
+        return view;
     }
 
+    private void prepareFavorites() {
+        favoriteList.clear();
+        movieList.clear();
+        favoriteService.list().enqueue(new CallbackRest<List<Favorite>>(getContext(), adapter, mSwipeRefreshLayout) {
+            @Override
+            protected void onSuccess(Call<List<Favorite>> call, Response<List<Favorite>> response) {
+                favoriteList.addAll(response.body());
+                for (Favorite favorite : favoriteList) {
+                    movieList.add(favorite.getMovie());
+                }
+            }
+        });
+    }
+
+    private void initFields(View view) {
+        movieList = new ArrayList<>();
+        favoriteList = new ArrayList<>();
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+
+        adapter = new MoviesAdapter(movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
+            @Override
+            public void onFavorite(Movie movie, Favorite favorite) {
+                if (favorite == null) {
+                    favorite = new Favorite(movie);
+                    favoriteService.save(favorite).enqueue(new CallbackRest<Favorite>(getContext()) {
+                        @Override
+                        protected void onSuccess(Call<Favorite> call, Response<Favorite> response) {
+                            prepareFavorites();
+                        }
+                    });
+                } else {
+                    favoriteService.delete(favorite).enqueue(new CallbackRest<ResponseBody>(getContext()) {
+                        @Override
+                        protected void onSuccess(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            prepareFavorites();
+                        }
+                    });
+                }
+
+            }
+        });
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(getContext(), getResources().getConfiguration().orientation);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, ConverterUtil.dpToPx(getContext(), 10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
+    }
+
+    private void setListeners() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                prepareFavorites();
+            }
+        });
+    }
 }

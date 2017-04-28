@@ -53,12 +53,10 @@ public class HomeFragment extends Fragment {
 
         initFields(view);
         setListeners();
-
         prepareMovies();
         prepareFavorites();
         return view;
     }
-
 
     private void prepareFavorites() {
         favoriteList.clear();
