@@ -2,24 +2,26 @@ package br.com.clairtonluz.moviemanagerapp.movie;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.R;
+import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHolder> {
 
-    private Context mContext;
-    private List<Movie> movieList;
+    private final List<Movie> movieList;
+    private final List<Favorite> favoriteList;
+    private final OnFavoriteListener onFavoriteListener;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, description;
@@ -34,10 +36,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         }
     }
 
-
-    public MoviesAdapter(Context mContext, List<Movie> movieList) {
-        this.mContext = mContext;
+    public MoviesAdapter(List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
         this.movieList = movieList;
+        this.favoriteList = favoriteList;
+        this.onFavoriteListener = onFavoriteListener;
     }
 
     @Override
@@ -49,35 +51,61 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     }
 
     @Override
+    public int getItemCount() {
+        return movieList.size();
+    }
+
+    @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Movie movie = movieList.get(position);
+        final Movie movie = movieList.get(position);
+        Context context = holder.title.getContext();
         holder.title.setText(movie.getName());
         holder.description.setText(movie.getDescription());
 
+        if (isFavorite(movie)) {
+            holder.favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+            holder.favorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+        } else {
+            holder.favorite.setColorFilter(null);
+            holder.favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
+
         if (movie.getUrlImage() != null) {
             Uri uri = Uri.parse(movie.getUrlImage());
-            Picasso.with(mContext)
+            Picasso.with(context)
                     .load(uri)
                     .error(R.drawable.default_image)
                     .into(holder.thumbnail);
-
         } else {
-            Picasso.with(mContext)
+            Picasso.with(context)
                     .load(R.drawable.default_image)
                     .into(holder.thumbnail);
         }
 
         holder.favorite.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, "Add to favourite", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Favorite favorite = getFavorite(movie);
+                onFavoriteListener.onFavorite(movie, favorite);
             }
         });
     }
 
-
-    @Override
-    public int getItemCount() {
-        return movieList.size();
+    private boolean isFavorite(Movie movie) {
+        return getFavorite(movie) != null;
     }
+
+    private Favorite getFavorite(Movie movie) {
+        for (Favorite favorite : favoriteList) {
+            if (favorite.getMovie().equals(movie)) {
+                return favorite;
+            }
+        }
+        return null;
+    }
+
+    public static interface OnFavoriteListener {
+        void onFavorite(Movie movie, Favorite favorite);
+    }
+
 }

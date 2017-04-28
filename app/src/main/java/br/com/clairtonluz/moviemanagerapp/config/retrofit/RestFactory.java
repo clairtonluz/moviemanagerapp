@@ -61,8 +61,10 @@ public class RestFactory {
 
         OkHttpClient client = httpClient.cache(getCache())
                 .addNetworkInterceptor(new RewriteResponseInterceptor())
-                .addNetworkInterceptor(new RetryInterceptor())
+//                .addNetworkInterceptor(new RetryInterceptor())
                 .addInterceptor(new RewriteResponseOffilineInterceptor(context))
+                .addInterceptor(new LogInterceptor())
+                .retryOnConnectionFailure(true)
                 .build();
         Retrofit retrofit = builder.client(client).build();
         return retrofit.create(serviceClass);

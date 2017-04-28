@@ -8,6 +8,10 @@ public class Favorite {
     private Integer userId;
     private Movie movie;
 
+    public Favorite(Movie movie) {
+        this.movie = movie;
+    }
+
     public Integer getUserId() {
         return userId;
     }
@@ -30,5 +34,21 @@ public class Favorite {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Favorite favorite = (Favorite) o;
+
+        return id != null ? id.equals(favorite.id) : favorite.id == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }
