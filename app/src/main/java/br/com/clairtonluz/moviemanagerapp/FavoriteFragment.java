@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TwoFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
 
-    public TwoFragment() {
+    public FavoriteFragment() {
         // Required empty public constructor
     }
 
@@ -27,7 +27,7 @@ public class TwoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_one, container, false);
+        return inflater.inflate(R.layout.fragment_favorite, container, false);
     }
 
 }

@@ -11,4 +11,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="one">Um</string>
     <string name="two">Dois</string>
+    <string name="action_add_favourite">Adicionar aos favoritos</string>
+    <string name="action_play_next">Tocar o próximo</string>
 </resources>
