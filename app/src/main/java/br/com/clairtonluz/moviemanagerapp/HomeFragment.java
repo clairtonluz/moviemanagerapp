@@ -6,6 +6,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,7 @@ public class HomeFragment extends Fragment {
 
     private MovieService movieService;
     private FavoriteService favoriteService;
+    private MainActivity.OnTabChangeListener onTabChangeListener;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e("teste", "onCreate1");
         movieService = new MovieService(getContext());
         favoriteService = new FavoriteService(getContext());
     }
@@ -50,6 +53,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("teste", "onCreateView1");
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         initFields(view);
@@ -57,6 +61,12 @@ public class HomeFragment extends Fragment {
         prepareMovies();
         prepareFavorites();
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        MainActivity.removeTabListener(onTabChangeListener);
+        super.onDestroyView();
     }
 
     public void refresh() {
@@ -145,6 +155,15 @@ public class HomeFragment extends Fragment {
                 prepareFavorites();
             }
         });
+
+        onTabChangeListener = new MainActivity.OnTabChangeListener() {
+            @Override
+            public void onTabSelected(int position) {
+                if (position == MainActivity.TAB_HOME)
+                    refresh();
+            }
+        };
+        MainActivity.addTabListener(onTabChangeListener);
     }
 
 

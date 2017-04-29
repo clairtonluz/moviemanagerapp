@@ -8,12 +8,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int TAB_HOME = 0;
     public static final int TAB_FAVORITE = 1;
+    private static final List<OnTabChangeListener> LISTENERS = new ArrayList<>();
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -22,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_favorite_black_24dp
     };
-    private HomeFragment homeFragment;
-    private FavoriteFragment favoriteFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +75,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                switch (tab.getPosition()) {
-                    case TAB_HOME:
-                        homeFragment.refresh();
-                        break;
-                    case TAB_FAVORITE:
-                        favoriteFragment.refresh();
-                        break;
+                for (OnTabChangeListener it : LISTENERS) {
+                    it.onTabSelected(tab.getPosition());
                 }
             }
 
@@ -97,13 +94,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        homeFragment = new HomeFragment();
-        favoriteFragment = new FavoriteFragment();
-        adapter.addFragment(homeFragment, getString(R.string.title_home));
-        adapter.addFragment(favoriteFragment, getString(R.string.title_favorite));
+        adapter.addFragment(new HomeFragment(), getString(R.string.title_home));
+        adapter.addFragment(new FavoriteFragment(), getString(R.string.title_favorite));
         viewPager.setAdapter(adapter);
 
     }
 
 
+    public static void addTabListener(OnTabChangeListener onTabChangeListener) {
+        LISTENERS.add(onTabChangeListener);
+    }
+
+    public static void removeTabListener(OnTabChangeListener onTabChangeListener) {
+        LISTENERS.remove(onTabChangeListener);
+    }
+
+    static interface OnTabChangeListener {
+        void onTabSelected(int position);
+    }
 }

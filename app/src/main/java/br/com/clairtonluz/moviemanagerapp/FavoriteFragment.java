@@ -7,6 +7,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class FavoriteFragment extends Fragment {
     private View noContent;
 
     private FavoriteService favoriteService;
+    private MainActivity.OnTabChangeListener onTabChangeListener;
 
     public FavoriteFragment() {
         // Required empty public constructor
@@ -43,6 +45,7 @@ public class FavoriteFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("teste", "onCreate");
         super.onCreate(savedInstanceState);
         favoriteService = new FavoriteService(getContext());
     }
@@ -50,11 +53,18 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.e("teste", "onCreateView");
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         initFields(view);
         setListeners();
         prepareFavorites();
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        MainActivity.removeTabListener(onTabChangeListener);
+        super.onDestroyView();
     }
 
     public void refresh() {
@@ -131,6 +141,15 @@ public class FavoriteFragment extends Fragment {
                 prepareFavorites();
             }
         });
+
+        onTabChangeListener = new MainActivity.OnTabChangeListener() {
+            @Override
+            public void onTabSelected(int position) {
+                if (position == MainActivity.TAB_HOME)
+                    refresh();
+            }
+        };
+        MainActivity.addTabListener(onTabChangeListener);
     }
 
 
