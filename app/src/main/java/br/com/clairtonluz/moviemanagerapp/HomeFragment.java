@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
     private List<Movie> movieList;
     private List<Favorite> favoriteList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private View noContent;
 
     private MovieService movieService;
     private FavoriteService favoriteService;
@@ -58,7 +59,12 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    public void refresh() {
+        prepareFavorites();
+    }
+
     private void prepareFavorites() {
+        mSwipeRefreshLayout.setRefreshing(true);
         favoriteList.clear();
         favoriteService.list().enqueue(new CallbackRest<List<Favorite>>(getContext(), adapter, mSwipeRefreshLayout) {
             @Override
@@ -69,19 +75,37 @@ public class HomeFragment extends Fragment {
     }
 
     private void prepareMovies() {
+        mSwipeRefreshLayout.setRefreshing(true);
         movieList.clear();
         movieService.list().enqueue(new CallbackRest<List<Movie>>(getContext(), adapter, mSwipeRefreshLayout) {
             @Override
             protected void onSuccess(Call<List<Movie>> call, Response<List<Movie>> response) {
                 movieList.addAll(response.body());
             }
+
+            @Override
+            protected void onComplete(Call<List<Movie>> call, boolean success) {
+                super.onComplete(call, success);
+                checkContent();
+            }
         });
+    }
+
+    private void checkContent() {
+        if (movieList.isEmpty()) {
+            noContent.setVisibility(View.VISIBLE);
+            mSwipeRefreshLayout.setVisibility(View.GONE);
+        } else {
+            noContent.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+        }
     }
 
     private void initFields(View view) {
         movieList = new ArrayList<>();
         favoriteList = new ArrayList<>();
 
+        noContent = view.findViewById(R.id.no_content);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
@@ -124,4 +148,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+
 }

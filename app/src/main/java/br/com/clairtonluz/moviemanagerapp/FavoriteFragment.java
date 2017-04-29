@@ -2,13 +2,11 @@ package br.com.clairtonluz.moviemanagerapp;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +26,14 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
-    public class FavoriteFragment extends Fragment {
+public class FavoriteFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
     private List<Favorite> favoriteList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private View noContent;
 
     private FavoriteService favoriteService;
 
@@ -61,7 +57,12 @@ import retrofit2.Response;
         return view;
     }
 
+    public void refresh() {
+        prepareFavorites();
+    }
+
     private void prepareFavorites() {
+        mSwipeRefreshLayout.setRefreshing(true);
         favoriteList.clear();
         movieList.clear();
         favoriteService.list().enqueue(new CallbackRest<List<Favorite>>(getContext(), adapter, mSwipeRefreshLayout) {
@@ -72,6 +73,18 @@ import retrofit2.Response;
                     movieList.add(favorite.getMovie());
                 }
             }
+
+            @Override
+            protected void onComplete(Call<List<Favorite>> call, boolean success) {
+                super.onComplete(call, success);
+                if (movieList.isEmpty()) {
+                    noContent.setVisibility(View.VISIBLE);
+                    mSwipeRefreshLayout.setVisibility(View.GONE);
+                } else {
+                    noContent.setVisibility(View.GONE);
+                    mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+                }
+            }
         });
     }
 
@@ -79,6 +92,7 @@ import retrofit2.Response;
         movieList = new ArrayList<>();
         favoriteList = new ArrayList<>();
 
+        noContent = view.findViewById(R.id.no_content);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
@@ -120,4 +134,6 @@ import retrofit2.Response;
             }
         });
     }
+
+
 }

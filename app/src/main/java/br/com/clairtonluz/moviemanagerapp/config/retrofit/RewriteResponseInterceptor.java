@@ -13,7 +13,7 @@ public class RewriteResponseInterceptor implements Interceptor {
             String cacheControl = response.header("Cache-Control");
             if (cacheControl == null || cacheControl.contains("no-store") || cacheControl.contains("no-cache") ||
                     cacheControl.contains("must-revalidate") || cacheControl.contains("max-age=0")) {
-                int maxAge = 60; // 1 minuto
+                int maxAge = 1;
                 response = response.newBuilder()
                         .header("Cache-Control", "public, max-age=" + maxAge)
                         .removeHeader("Pragma")

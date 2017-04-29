@@ -20,12 +20,14 @@ public class RewriteResponseOffilineInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
-        String headerCache = request.header("Cache-Control"); // isso vai servir mais na frente para forçar um serviço não utilizar cache
-        if (!isNetworkAvailable() && (headerCache == null || !headerCache.contains("no-cache"))) {
-            int maxStale = 60 * 60 * 24 * 28; // 4 semanas
-            request = request.newBuilder()
-                    .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
-                    .build();
+        if (request.method().equals("GET")) {
+            String headerCache = request.header("Cache-Control"); // isso vai servir mais na frente para forçar um serviço não utilizar cache
+            if (!isNetworkAvailable() && (headerCache == null || !headerCache.contains("no-cache"))) {
+                int maxStale = 60 * 60 * 24 * 28; // 4 semanas
+                request = request.newBuilder()
+                        .header("Cache-Control", "public, only-if-cached, max-stale=" + maxStale)
+                        .build();
+            }
         }
         return chain.proceed(request);
     }
