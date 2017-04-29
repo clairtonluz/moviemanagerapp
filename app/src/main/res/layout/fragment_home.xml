@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     tools:context="br.com.clairtonluz.moviemanagerapp.HomeFragment">
 
-        <include
-            android:id="@+id/no_content"
-            layout="@layout/no_content" />
+    <include
+        android:id="@+id/no_content"
+        layout="@layout/no_content" />
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh"
