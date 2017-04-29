@@ -1,8 +1,9 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Movie {
+public class Movie implements Serializable {
     private Integer id;
     private String name;
     private String urlImage;

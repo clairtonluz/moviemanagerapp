@@ -1,6 +1,7 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +24,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private final List<Favorite> favoriteList;
     private final OnFavoriteListener onFavoriteListener;
 
+    public MoviesAdapter(List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
+        this.movieList = movieList;
+        this.favoriteList = favoriteList;
+        this.onFavoriteListener = onFavoriteListener;
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView title, description;
         public ImageView thumbnail, favorite;
@@ -36,11 +43,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         }
     }
 
-    public MoviesAdapter(List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
-        this.movieList = movieList;
-        this.favoriteList = favoriteList;
-        this.onFavoriteListener = onFavoriteListener;
-    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,7 +60,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         final Movie movie = movieList.get(position);
-        Context context = holder.title.getContext();
+        final Context context = holder.title.getContext();
         holder.title.setText(movie.getName());
         holder.description.setText(movie.getDescription());
 
@@ -87,6 +89,15 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
             public void onClick(View v) {
                 Favorite favorite = getFavorite(movie);
                 onFavoriteListener.onFavorite(movie, favorite);
+            }
+        });
+
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieDetailActivity.class);
+                intent.putExtra("movie", movie);
+                context.startActivity(intent);
             }
         });
     }

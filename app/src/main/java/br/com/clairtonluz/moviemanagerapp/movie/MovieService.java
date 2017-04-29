@@ -18,4 +18,8 @@ public class MovieService {
         return movieRest.list();
     }
 
+    public Call<Movie> get(Integer id) {
+        return movieRest.get(id);
+    }
+
 }

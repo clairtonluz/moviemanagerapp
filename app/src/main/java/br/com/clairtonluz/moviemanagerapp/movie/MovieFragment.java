@@ -1,4 +1,4 @@
-package br.com.clairtonluz.moviemanagerapp;
+package br.com.clairtonluz.moviemanagerapp.movie;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,12 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.clairtonluz.moviemanagerapp.MainActivity;
+import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.config.GridSpacingItemDecoration;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
 import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
 import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteService;
-import br.com.clairtonluz.moviemanagerapp.movie.Movie;
-import br.com.clairtonluz.moviemanagerapp.movie.MovieService;
-import br.com.clairtonluz.moviemanagerapp.movie.MoviesAdapter;
 import br.com.clairtonluz.moviemanagerapp.util.ConverterUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;

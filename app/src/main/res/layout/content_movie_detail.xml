@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.clairtonluz.moviemanagerapp.movie.MovieDetailActivity"
+    tools:showIn="@layout/activity_movie_detail">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent hendrerit lobortis elementum. Sed volutpat quam ac tortor rutrum viverra. Duis vel congue ligula, sed tincidunt urna. Suspendisse pellentesque libero placerat egestas aliquet. Suspendisse maximus metus dui, non ullamcorper arcu interdum et. Vivamus sapien neque, rhoncus at ante sit amet, venenatis mollis ligula. Maecenas felis mauris, consequat viverra odio et, venenatis imperdiet ante. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. In faucibus pretium porta.
+
+Quisque dapibus eget lacus vitae volutpat. Nullam id porttitor diam. In sagittis nibh eu fringilla fermentum. Etiam dignissim aliquet tellus vitae dictum. Phasellus quis diam rutrum, luctus mauris vitae, porttitor nisi. Curabitur lobortis, enim et semper gravida, nisi tortor lobortis tellus, vitae elementum est nulla quis arcu. Suspendisse potenti. Sed eros neque, fermentum eu ipsum sed, varius fringilla ex. Duis condimentum hendrerit tempus. Pellentesque molestie nulla sed sem rutrum dapibus. Nulla gravida condimentum ex vel suscipit. Cras faucibus ipsum justo, vitae faucibus ex condimentum sollicitudin. Nam ac justo ac quam convallis condimentum vel nec metus. Mauris auctor tincidunt volutpat. Phasellus porta cursus dui vitae lobortis. Sed consequat odio eget massa hendrerit pharetra.
+
+In quis ligula sed metus laoreet sagittis. Donec elementum enim vitae nisi efficitur, at eleifend velit tincidunt. Nam et neque accumsan, pulvinar tellus id, congue diam. Suspendisse et hendrerit tortor. Vivamus consectetur non urna at venenatis. Ut eu magna et dui volutpat feugiat. Duis sit amet tempus justo. Cras eget dictum erat. Nam varius nisl vel turpis pharetra, ut fermentum diam volutpat. Vestibulum facilisis vestibulum nunc, vel consectetur urna vulputate non. Nunc egestas orci pellentesque metus auctor, eu fringilla erat consequat. Nunc id lobortis libero. Morbi in risus ullamcorper, ornare tortor at, elementum velit. Mauris eget odio quis erat efficitur iaculis.
+
+Aliquam risus velit, tristique ut vehicula sit amet, ullamcorper non sapien. Quisque velit diam, placerat ut pretium a, tincidunt eu nibh. Nullam elementum nunc ut neque pulvinar bibendum. Fusce dapibus lacus at ex dignissim vestibulum. Integer fermentum mollis pulvinar. Morbi maximus, metus a facilisis convallis, nisl lectus porta ligula, vitae suscipit nunc ipsum at odio. Nullam in tincidunt ex. Proin eleifend sapien vel magna ornare, vel molestie enim ultrices. Proin accumsan quis tortor et ultrices. In lacinia arcu porta augue scelerisque, non bibendum nisi laoreet. Donec ipsum justo, molestie in nulla non, maximus mollis lectus. Sed eget volutpat lacus. Proin aliquam enim id semper lacinia. Cras tincidunt et libero eu tempus. Suspendisse pulvinar lacus lacus, vitae lobortis eros porta at.
+
+Etiam non purus non lectus tristique vehicula. Sed vulputate enim non velit consequat venenatis. Suspendisse erat nisl, dictum non vehicula quis, posuere eget tellus. Sed eu accumsan mi, in ullamcorper nisi. Ut tristique, tortor in consectetur facilisis, nisi diam tincidunt nisi, sed dignissim purus magna vel nisi. Vivamus malesuada ut arcu molestie luctus. Vestibulum facilisis volutpat turpis posuere rhoncus. Vivamus pulvinar nisl vel aliquet eleifend. Nulla sagittis lacus nibh, nec facilisis lacus accumsan vitae. Proin et porta est, quis laoreet libero. Donec lorem ex, aliquet eget ornare id, mattis quis risus.
+
+"/>
+
+</android.support.v4.widget.NestedScrollView>

@@ -13,6 +13,7 @@ import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteFragment;
+import br.com.clairtonluz.moviemanagerapp.movie.MovieFragment;
 
 public class MainActivity extends AppCompatActivity {
 
