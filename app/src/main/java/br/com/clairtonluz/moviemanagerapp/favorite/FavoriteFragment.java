@@ -1,4 +1,5 @@
-package br.com.clairtonluz.moviemanagerapp;
+package br.com.clairtonluz.moviemanagerapp.favorite;
+
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,19 +15,22 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.clairtonluz.moviemanagerapp.MainActivity;
+import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.config.GridSpacingItemDecoration;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
 import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
 import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteService;
 import br.com.clairtonluz.moviemanagerapp.movie.Movie;
-import br.com.clairtonluz.moviemanagerapp.movie.MovieService;
 import br.com.clairtonluz.moviemanagerapp.movie.MoviesAdapter;
 import br.com.clairtonluz.moviemanagerapp.util.ConverterUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class HomeFragment extends Fragment {
+
+public class FavoriteFragment extends Fragment {
+
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
@@ -34,31 +38,27 @@ public class HomeFragment extends Fragment {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private View noContent;
 
-    private MovieService movieService;
     private FavoriteService favoriteService;
     private MainActivity.OnTabChangeListener onTabChangeListener;
 
-    public HomeFragment() {
+    public FavoriteFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.e("teste", "onCreate");
         super.onCreate(savedInstanceState);
-        Log.e("teste", "onCreate1");
-        movieService = new MovieService(getContext());
         favoriteService = new FavoriteService(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.e("teste", "onCreateView1");
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
-
+        Log.e("teste", "onCreateView");
+        View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         initFields(view);
         setListeners();
-        prepareMovies();
         prepareFavorites();
         return view;
     }
@@ -76,37 +76,26 @@ public class HomeFragment extends Fragment {
     private void prepareFavorites() {
         mSwipeRefreshLayout.setRefreshing(true);
         favoriteList.clear();
+        movieList.clear();
         favoriteService.list().enqueue(new CallbackRest<List<Favorite>>(getContext(), adapter, mSwipeRefreshLayout) {
             @Override
             protected void onSuccess(Call<List<Favorite>> call, Response<List<Favorite>> response) {
                 favoriteList.addAll(response.body());
-            }
-        });
-    }
-
-    private void prepareMovies() {
-        mSwipeRefreshLayout.setRefreshing(true);
-        movieList.clear();
-        movieService.list().enqueue(new CallbackRest<List<Movie>>(getContext(), adapter, mSwipeRefreshLayout) {
-            @Override
-            protected void onSuccess(Call<List<Movie>> call, Response<List<Movie>> response) {
-                movieList.addAll(response.body());
+                for (Favorite favorite : favoriteList) {
+                    movieList.add(favorite.getMovie());
+                }
             }
 
             @Override
-            protected void onComplete(Call<List<Movie>> call, boolean success) {
+            protected void onComplete(Call<List<Favorite>> call, boolean success) {
                 super.onComplete(call, success);
-                checkContent();
+                if (movieList.isEmpty()) {
+                    noContent.setVisibility(View.VISIBLE);
+                } else {
+                    noContent.setVisibility(View.GONE);
+                }
             }
         });
-    }
-
-    private void checkContent() {
-        if (movieList.isEmpty()) {
-            noContent.setVisibility(View.VISIBLE);
-        } else {
-            noContent.setVisibility(View.GONE);
-        }
     }
 
     private void initFields(View view) {
@@ -151,7 +140,6 @@ public class HomeFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                prepareMovies();
                 prepareFavorites();
             }
         });
@@ -159,7 +147,7 @@ public class HomeFragment extends Fragment {
         onTabChangeListener = new MainActivity.OnTabChangeListener() {
             @Override
             public void onTabSelected(int position) {
-                if (position == MainActivity.TAB_HOME)
+                if (position == MainActivity.TAB_FAVORITE)
                     refresh();
             }
         };

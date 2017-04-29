@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
+import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HomeFragment(), getString(R.string.title_home));
+        adapter.addFragment(new MovieFragment(), getString(R.string.title_home));
         adapter.addFragment(new FavoriteFragment(), getString(R.string.title_favorite));
         viewPager.setAdapter(adapter);
 
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         LISTENERS.remove(onTabChangeListener);
     }
 
-    static interface OnTabChangeListener {
+    public interface OnTabChangeListener {
         void onTabSelected(int position);
     }
 }

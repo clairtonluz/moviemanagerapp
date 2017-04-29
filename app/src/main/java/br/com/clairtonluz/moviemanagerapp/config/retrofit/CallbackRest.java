@@ -5,6 +5,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -51,8 +54,22 @@ public abstract class CallbackRest<T> implements Callback<T> {
     protected abstract void onSuccess(Call<T> call, Response<T> response);
 
     protected void onUnsuccess(Call<T> call, Response<T> response) {
-        okhttp3.Response raw = response.raw();
-        Toast.makeText(context, raw.code() + " - " + raw.message(), Toast.LENGTH_LONG).show();
+        ResponseBody errorBody = response.errorBody();
+        String message;
+        if (errorBody != null) {
+            try {
+                ErrorRest error = new Gson().fromJson(errorBody.string(), ErrorRest.class);
+                message = error.message;
+            } catch (Exception e) {
+                e.printStackTrace();
+                message = String.format("%d - %s", response.code(), response.message());
+            }
+
+        } else {
+            message = String.format("%d - %s", response.code(), response.message());
+        }
+
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     protected void onComplete(Call<T> call, boolean success) {
