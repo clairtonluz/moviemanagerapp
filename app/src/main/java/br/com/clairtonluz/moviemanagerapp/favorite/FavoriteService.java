@@ -35,4 +35,18 @@ public class FavoriteService {
         return favoriteRest.delete(favorite.getId());
     }
 
+
+    public static boolean isFavorite(List<Favorite> favoriteList, Movie movie) {
+        return getFavorite(favoriteList, movie) != null;
+    }
+
+    public static Favorite getFavorite(List<Favorite> favoriteList, Movie movie) {
+        for (Favorite favorite : favoriteList) {
+            if (favorite.getMovie().equals(movie)) {
+                return favorite;
+            }
+        }
+        return null;
+    }
+
 }

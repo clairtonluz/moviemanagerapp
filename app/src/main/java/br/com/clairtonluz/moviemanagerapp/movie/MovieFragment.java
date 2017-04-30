@@ -122,7 +122,7 @@ public class MovieFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
-        adapter = new MoviesAdapter(movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
+        adapter = new MoviesAdapter(getContext(), movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
             @Override
             public void onFavorite(Movie movie, Favorite favorite) {
                 if (favorite == null) {

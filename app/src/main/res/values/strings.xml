@@ -19,5 +19,7 @@
     <string name="field_required">Campo obrigatório</string>
     <string name="search_hint">Buscar filmes</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="action_favorite">Favorito</string>
+    <string name="message_sucesso">Operação realizada com sucesso</string>
 
 </resources>

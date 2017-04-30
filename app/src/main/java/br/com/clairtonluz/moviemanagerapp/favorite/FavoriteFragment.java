@@ -105,7 +105,7 @@ public class FavoriteFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
 
-        adapter = new MoviesAdapter(movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
+        adapter = new MoviesAdapter(getContext(), movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
             @Override
             public void onFavorite(Movie movie, Favorite favorite) {
                 if (favorite == null) {

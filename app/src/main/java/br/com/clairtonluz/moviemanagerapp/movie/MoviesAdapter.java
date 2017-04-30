@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,25 +19,25 @@ import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
+import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteService;
 
 public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHolder> {
 
     private final List<Movie> movieList;
     private final List<Favorite> favoriteList;
     private final OnFavoriteListener onFavoriteListener;
-    private ScaleAnimation heartbeatAnimation;
+    private Animation heartbeatAnimation;
 
     public MoviesAdapter(List<Movie> movieList) {
-        this(movieList, null, null);
+        this(null, movieList, null, null);
     }
 
-    public MoviesAdapter(List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
+    public MoviesAdapter(Context context, List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
         this.movieList = movieList;
         this.favoriteList = favoriteList;
         this.onFavoriteListener = onFavoriteListener;
-        this.heartbeatAnimation = new ScaleAnimation(1f, 1.2f, 1f, 1.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-        this.heartbeatAnimation.setDuration(500);
-
+        if (context != null)
+            this.heartbeatAnimation = AnimationUtils.loadAnimation(context, R.anim.heartbeat);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -98,7 +98,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         if (favoriteList == null || onFavoriteListener == null) {
             holder.favorite.setVisibility(View.GONE);
         } else {
-            if (isFavorite(movie)) {
+            if (FavoriteService.isFavorite(favoriteList, movie)) {
                 holder.favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
                 holder.favorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
             } else {
@@ -110,25 +110,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
                 @Override
                 public void onClick(View v) {
                     holder.favorite.startAnimation(heartbeatAnimation);
-                    Favorite favorite = getFavorite(movie);
+                    Favorite favorite = FavoriteService.getFavorite(favoriteList, movie);
                     onFavoriteListener.onFavorite(movie, favorite);
                 }
             });
         }
 
-    }
-
-    private boolean isFavorite(Movie movie) {
-        return getFavorite(movie) != null;
-    }
-
-    private Favorite getFavorite(Movie movie) {
-        for (Favorite favorite : favoriteList) {
-            if (favorite.getMovie().equals(movie)) {
-                return favorite;
-            }
-        }
-        return null;
     }
 
     public static interface OnFavoriteListener {
