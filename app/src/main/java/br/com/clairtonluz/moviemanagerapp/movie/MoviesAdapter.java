@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private final List<Movie> movieList;
     private final List<Favorite> favoriteList;
     private final OnFavoriteListener onFavoriteListener;
+    private ScaleAnimation heartbeatAnimation;
 
     public MoviesAdapter(List<Movie> movieList) {
         this(movieList, null, null);
@@ -32,6 +35,9 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         this.movieList = movieList;
         this.favoriteList = favoriteList;
         this.onFavoriteListener = onFavoriteListener;
+        this.heartbeatAnimation = new ScaleAnimation(1f, 1.2f, 1f, 1.2f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        this.heartbeatAnimation.setDuration(500);
+
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -103,6 +109,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
             holder.favorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    holder.favorite.startAnimation(heartbeatAnimation);
                     Favorite favorite = getFavorite(movie);
                     onFavoriteListener.onFavorite(movie, favorite);
                 }
