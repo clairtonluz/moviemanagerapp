@@ -3,6 +3,7 @@ package br.com.clairtonluz.moviemanagerapp.movie;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import com.squareup.picasso.Picasso;
 
 import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.generic.BackButtonActivity;
+import br.com.clairtonluz.moviemanagerapp.util.ExtraUtil;
 
 public class MovieDetailActivity extends BackButtonActivity {
 
@@ -28,7 +30,7 @@ public class MovieDetailActivity extends BackButtonActivity {
         setupToolbar();
 
         initFields();
-        movie = getExtraSerializable("movie", Movie.class);
+        movie = ExtraUtil.getExtraSerializable(extras, "movie", Movie.class);
         showMovie(movie);
     }
 
@@ -54,8 +56,9 @@ public class MovieDetailActivity extends BackButtonActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            movie = getExtraSerializable("movie", Movie.class);
+            movie = (Movie) data.getSerializableExtra("movie");
             showMovie(movie);
+            Snackbar.make(toolbarImage, "Operação realizada com sucesso", Snackbar.LENGTH_LONG).show();
         }
     }
 

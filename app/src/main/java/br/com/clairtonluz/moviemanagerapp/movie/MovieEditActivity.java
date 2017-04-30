@@ -1,5 +1,6 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.view.Menu;
@@ -14,6 +15,7 @@ import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
 import br.com.clairtonluz.moviemanagerapp.generic.BackButtonActivity;
 import br.com.clairtonluz.moviemanagerapp.util.Constants;
+import br.com.clairtonluz.moviemanagerapp.util.ExtraUtil;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import retrofit2.Call;
 import retrofit2.Response;
@@ -36,7 +38,7 @@ public class MovieEditActivity extends BackButtonActivity {
         setupToolbar();
         initFields();
         movieService = new MovieService(this);
-        movie = getExtraSerializable("movie", Movie.class);
+        movie = ExtraUtil.getExtraSerializable(extras, "movie", Movie.class);
         showMovie(movie);
     }
 
@@ -83,6 +85,10 @@ public class MovieEditActivity extends BackButtonActivity {
             protected void onSuccess(Call<Movie> call, Response<Movie> response) {
                 MovieEditActivity.this.movie = response.body();
                 showMovie(MovieEditActivity.this.movie);
+                Intent intent = new Intent();
+                intent.putExtra("movie", movie);
+                setResult(RESULT_OK, intent);
+                finish();
             }
         });
     }

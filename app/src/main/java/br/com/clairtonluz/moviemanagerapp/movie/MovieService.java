@@ -24,9 +24,9 @@ public class MovieService {
 
     public Call<Movie> save(Movie movie) {
         if (movie.getId() == null) {
-            return movieRest.post(movie);
+            return movieRest.insert(movie);
         } else {
-            return movieRest.put(movie.getId(), movie);
+            return movieRest.update(movie.getId(), movie);
         }
     }
 }

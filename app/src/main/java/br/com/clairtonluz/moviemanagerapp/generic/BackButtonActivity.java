@@ -15,7 +15,7 @@ import br.com.clairtonluz.moviemanagerapp.R;
 
 public abstract class BackButtonActivity extends AppCompatActivity {
 
-    private Bundle extras;
+    protected Bundle extras;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,32 +32,6 @@ public abstract class BackButtonActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-    }
-
-    protected Integer getExtraInt(String key) {
-        Integer value = null;
-        if (extras != null) {
-            int anInt = extras.getInt(key, -1);
-            if (anInt != -1)
-                value = anInt;
-        }
-        return value;
-    }
-
-    protected String getExtraString(String key) {
-        String value = null;
-        if (extras != null) {
-            value = extras.getString(key);
-        }
-        return value;
-    }
-
-    protected <T> T getExtraSerializable(String key, Class<T> tClass) {
-        T value = null;
-        if (extras != null) {
-            value = (T) extras.getSerializable(key);
-        }
-        return value;
     }
 
     @Override

@@ -1,12 +1,16 @@
 package br.com.clairtonluz.moviemanagerapp.favorite;
 
 
+import br.com.clairtonluz.moviemanagerapp.generic.GenericModel;
 import br.com.clairtonluz.moviemanagerapp.movie.Movie;
 
-public class Favorite {
+public class Favorite extends GenericModel {
     private Integer id;
     private Integer userId;
     private Movie movie;
+
+    public Favorite() {
+    }
 
     public Favorite(Movie movie) {
         this.movie = movie;

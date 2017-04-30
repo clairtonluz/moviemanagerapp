@@ -6,7 +6,6 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 interface MovieRest {
@@ -18,8 +17,8 @@ interface MovieRest {
     Call<Movie> get(@Path("id") Integer id);
 
     @POST("movies")
-    Call<Movie> post(@Body Movie movie);
+    Call<Movie> insert(@Body Movie movie);
 
-    @PUT("movies/{id}")
-    Call<Movie> put(@Path("id") Integer id, @Body Movie movie);
+    @POST("movies/{id}")
+    Call<Movie> update(@Path("id") Integer id, @Body Movie movie);
 }

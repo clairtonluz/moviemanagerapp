@@ -5,7 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -58,7 +58,7 @@ public abstract class CallbackRest<T> implements Callback<T> {
         String message;
         if (errorBody != null) {
             try {
-                ErrorRest error = new Gson().fromJson(errorBody.string(), ErrorRest.class);
+                ErrorRest error = new ObjectMapper().readValue(errorBody.string(), ErrorRest.class);
                 message = error.message;
             } catch (Exception e) {
                 e.printStackTrace();

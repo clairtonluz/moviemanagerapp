@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movie implements Serializable {
+import br.com.clairtonluz.moviemanagerapp.generic.GenericModel;
+
+public class Movie extends GenericModel implements Serializable {
     private Integer id;
     private String name;
     private String urlImage;

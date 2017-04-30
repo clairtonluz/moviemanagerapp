@@ -1,7 +1,9 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
 
-public class Type {
+import br.com.clairtonluz.moviemanagerapp.generic.GenericModel;
+
+public class Type extends GenericModel {
     private Integer id;
     private String name;
 

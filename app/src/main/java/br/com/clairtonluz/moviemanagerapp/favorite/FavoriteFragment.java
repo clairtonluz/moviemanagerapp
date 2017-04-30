@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import br.com.clairtonluz.moviemanagerapp.MainActivity;
 import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.config.GridSpacingItemDecoration;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
-import br.com.clairtonluz.moviemanagerapp.favorite.Favorite;
-import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteService;
 import br.com.clairtonluz.moviemanagerapp.movie.Movie;
 import br.com.clairtonluz.moviemanagerapp.movie.MoviesAdapter;
 import br.com.clairtonluz.moviemanagerapp.util.ConverterUtil;
@@ -47,20 +44,22 @@ public class FavoriteFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        Log.e("teste", "onCreate");
         super.onCreate(savedInstanceState);
         favoriteService = new FavoriteService(getContext());
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        Log.e("teste", "onCreateView");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorite, container, false);
         initFields(view);
         setListeners();
-        prepareFavorites();
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        prepareFavorites();
     }
 
     @Override

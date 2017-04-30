@@ -54,9 +54,14 @@ public class MovieFragment extends Fragment {
 
         initFields(view);
         setListeners();
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         prepareMovies();
         prepareFavorites();
-        return view;
     }
 
     @Override

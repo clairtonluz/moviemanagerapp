@@ -10,7 +10,7 @@ import java.io.IOException;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class RestFactory {
     public static final String API_BASE_URL = "http://192.168.2.7:8080/api/";
@@ -38,7 +38,7 @@ public class RestFactory {
     }
 
     private static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(API_BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create());
+            .addConverterFactory(JacksonConverterFactory.create());
 
 
     public static Cache getCache() {
