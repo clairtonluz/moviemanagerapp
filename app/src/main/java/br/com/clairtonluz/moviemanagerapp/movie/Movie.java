@@ -1,6 +1,7 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Movie implements Serializable {
@@ -8,10 +9,11 @@ public class Movie implements Serializable {
     private String name;
     private String urlImage;
     private String description;
-    private List<Type> types;
     private Integer year;
+    private List<Type> types;
 
     public Movie() {
+        types = new ArrayList<>();
     }
 
     public String getName() {

@@ -22,4 +22,11 @@ public class MovieService {
         return movieRest.get(id);
     }
 
+    public Call<Movie> save(Movie movie) {
+        if (movie.getId() == null) {
+            return movieRest.post(movie);
+        } else {
+            return movieRest.put(movie.getId(), movie);
+        }
+    }
 }

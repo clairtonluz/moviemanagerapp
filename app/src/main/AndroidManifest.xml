@@ -25,6 +25,10 @@
             android:name=".movie.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
             android:theme="@style/MyMaterialTheme" />
+        <activity
+            android:name=".movie.MovieEditActivity"
+            android:label="@string/title_activity_movie_edit"
+            android:theme="@style/MyMaterialTheme"></activity>
     </application>
 
 </manifest>

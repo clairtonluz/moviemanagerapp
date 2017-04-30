@@ -1,8 +1,8 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,18 +14,21 @@ import br.com.clairtonluz.moviemanagerapp.generic.BackButtonActivity;
 
 public class MovieDetailActivity extends BackButtonActivity {
 
+    public static final int REQUEST_CODE = 10;
     private ImageView toolbarImage;
     private TextView yearText;
     private TextView descriptionText;
     private CollapsingToolbarLayout collapsingToolbarLayout;
+    private Movie movie;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         setupToolbar();
+
         initFields();
-        Movie movie = getExtraSerializable("movie", Movie.class);
+        movie = getExtraSerializable("movie", Movie.class);
         showMovie(movie);
     }
 
@@ -33,6 +36,7 @@ public class MovieDetailActivity extends BackButtonActivity {
         collapsingToolbarLayout.setTitle(movie.getName());
         Picasso.with(this)
                 .load(movie.getUrlImage())
+                .placeholder(R.drawable.default_image)
                 .error(R.drawable.default_image)
                 .into(toolbarImage);
 
@@ -41,9 +45,18 @@ public class MovieDetailActivity extends BackButtonActivity {
     }
 
     public void editAction(View view) {
-        collapsingToolbarLayout.setTitle("teste");
-        Snackbar.make(view, "Replace with your own actio2n", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        Intent intent = new Intent(this, MovieEditActivity.class);
+        intent.putExtra("movie", movie);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            movie = getExtraSerializable("movie", Movie.class);
+            showMovie(movie);
+        }
     }
 
     private void initFields() {

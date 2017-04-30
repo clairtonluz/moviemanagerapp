@@ -18,7 +18,7 @@ public abstract class BackButtonActivity extends AppCompatActivity {
     private Bundle extras;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         extras = getIntent().getExtras();
     }
