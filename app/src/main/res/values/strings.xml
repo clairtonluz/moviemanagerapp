@@ -21,5 +21,6 @@
     <string name="title_activity_main2">Main2Activity</string>
     <string name="action_favorite">Favorito</string>
     <string name="message_sucesso">Operação realizada com sucesso</string>
+    <string name="URL">http://192.168.2.7:8080/api/</string>
 
 </resources>

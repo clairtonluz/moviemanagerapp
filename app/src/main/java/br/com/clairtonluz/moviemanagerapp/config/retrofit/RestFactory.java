@@ -7,15 +7,45 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
+import br.com.clairtonluz.moviemanagerapp.R;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class RestFactory {
-    public static final String API_BASE_URL = "http://192.168.2.7:8080/api/";
-
+    private static Retrofit.Builder builder;
     private static Cache cache;
+
+    private static Retrofit.Builder getBuilder(Context context) {
+        if (builder == null) {
+            builder = new Retrofit.Builder().baseUrl(context.getString(R.string.URL))
+                    .addConverterFactory(JacksonConverterFactory.create());
+        }
+
+        return builder;
+    }
+
+    public static <S> S createService(Context context, Class<S> serviceClass, String username, String password) {
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        if (username != null && password != null) {
+            httpClient.addInterceptor(new BasicAuthInterceptor(username, password));
+        }
+
+        OkHttpClient client = httpClient.cache(getCache())
+                .addNetworkInterceptor(new RewriteResponseInterceptor())
+                .addInterceptor(new RewriteResponseOffilineInterceptor(context))
+                .addInterceptor(new LogInterceptor())
+                .retryOnConnectionFailure(true)
+                .build();
+
+        Retrofit retrofit = getBuilder(context).client(client).build();
+        return retrofit.create(serviceClass);
+    }
+
+    public static Cache getCache() {
+        return cache;
+    }
 
     // Esse metodo deve ser chamado no onCreate da sua MainActivity
     public static void carregarCache(Context context) {
@@ -35,38 +65,5 @@ public class RestFactory {
         if (cache != null) {
             cache.flush();
         }
-    }
-
-    private static Retrofit.Builder builder = new Retrofit.Builder().baseUrl(API_BASE_URL)
-            .addConverterFactory(JacksonConverterFactory.create());
-
-
-    public static Cache getCache() {
-        return cache;
-    }
-
-    public static Retrofit builder() {
-        return builder.build();
-    }
-
-    public static <S> S createService(Context context, Class<S> serviceClass) {
-        return createService(context, serviceClass, null, null);
-    }
-
-    public static <S> S createService(Context context, Class<S> serviceClass, String username, String password) {
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        if (username != null && password != null) {
-            httpClient.addInterceptor(new BasicAuthInterceptor(username, password));
-        }
-
-        OkHttpClient client = httpClient.cache(getCache())
-                .addNetworkInterceptor(new RewriteResponseInterceptor())
-//                .addNetworkInterceptor(new RetryInterceptor())
-                .addInterceptor(new RewriteResponseOffilineInterceptor(context))
-                .addInterceptor(new LogInterceptor())
-                .retryOnConnectionFailure(true)
-                .build();
-        Retrofit retrofit = builder.client(client).build();
-        return retrofit.create(serviceClass);
     }
 }
