@@ -18,6 +18,7 @@
             android:id="@+id/movie_image"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
+            android:layout_marginBottom="@dimen/card_margin"
             android:scaleType="centerCrop" />
 
         <android.support.design.widget.TextInputLayout
@@ -29,7 +30,7 @@
                 android:id="@+id/name_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text" />
+                android:inputType="textCapSentences" />
 
         </android.support.design.widget.TextInputLayout>
 

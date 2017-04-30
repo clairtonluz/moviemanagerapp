@@ -1,6 +1,10 @@
 package br.com.clairtonluz.moviemanagerapp.movie;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -25,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class MovieFragment extends Fragment {
+
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
@@ -35,6 +40,7 @@ public class MovieFragment extends Fragment {
     private MovieService movieService;
     private FavoriteService favoriteService;
     private MainActivity.OnTabChangeListener onTabChangeListener;
+    private FloatingActionButton fab;
 
     public MovieFragment() {
         // Required empty public constructor
@@ -117,6 +123,7 @@ public class MovieFragment extends Fragment {
         noContent = view.findViewById(R.id.no_content);
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        fab = (FloatingActionButton) view.findViewById(R.id.fab);
 
         adapter = new MoviesAdapter(movieList, favoriteList, new MoviesAdapter.OnFavoriteListener() {
             @Override
@@ -154,6 +161,18 @@ public class MovieFragment extends Fragment {
             public void onRefresh() {
                 prepareMovies();
                 prepareFavorites();
+            }
+        });
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    fab.hide();
+                } else {
+                    fab.show();
+                }
             }
         });
 

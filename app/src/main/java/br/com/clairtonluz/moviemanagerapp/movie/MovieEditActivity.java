@@ -3,6 +3,7 @@ package br.com.clairtonluz.moviemanagerapp.movie;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.RequestCreator;
 
 import br.com.clairtonluz.moviemanagerapp.R;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.CallbackRest;
@@ -39,6 +41,10 @@ public class MovieEditActivity extends BackButtonActivity {
         initFields();
         movieService = new MovieService(this);
         movie = ExtraUtil.getExtraSerializable(extras, "movie", Movie.class);
+        if (movie == null) {
+            setTitle(getString(R.string.registerMovie));
+            movie = new Movie();
+        }
         showMovie(movie);
     }
 
@@ -75,22 +81,49 @@ public class MovieEditActivity extends BackButtonActivity {
     }
 
     public void save() {
-        movie.setName(nameText.getText().toString());
-        movie.setDescription(descriptionText.getText().toString());
-        movie.setYear((Integer) yearSpinner.getSelectedItem());
-        movie.setUrlImage(urlText.getText().toString());
+        if (isValidInputs()) {
+            movie.setName(nameText.getText().toString());
+            movie.setDescription(descriptionText.getText().toString());
+            movie.setYear((Integer) yearSpinner.getSelectedItem());
+            movie.setUrlImage(urlText.getText().toString());
 
-        movieService.save(movie).enqueue(new CallbackRest<Movie>(this) {
-            @Override
-            protected void onSuccess(Call<Movie> call, Response<Movie> response) {
-                MovieEditActivity.this.movie = response.body();
-                showMovie(MovieEditActivity.this.movie);
-                Intent intent = new Intent();
-                intent.putExtra("movie", movie);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
+            movieService.save(movie).enqueue(new CallbackRest<Movie>(this) {
+                @Override
+                protected void onSuccess(Call<Movie> call, Response<Movie> response) {
+                    MovieEditActivity.this.movie = response.body();
+                    showMovie(MovieEditActivity.this.movie);
+                    Intent intent = new Intent();
+                    intent.putExtra("movie", movie);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
+    }
+
+    public boolean isValidInputs() {
+        boolean valid = true;
+        nameText.setError(null);
+        descriptionText.setError(null);
+        yearSpinner.setError(null);
+        urlText.setError(null);
+        if (TextUtils.isEmpty(nameText.getText().toString())) {
+            valid = false;
+            nameText.setError(getString(R.string.field_required));
+        }
+        if (TextUtils.isEmpty(descriptionText.getText().toString())) {
+            valid = false;
+            descriptionText.setError(getString(R.string.field_required));
+        }
+        if (yearSpinner.getSelectedItemPosition() == 0) {
+            valid = false;
+            yearSpinner.setError(getString(R.string.field_required));
+        }
+        if (TextUtils.isEmpty(urlText.getText().toString())) {
+            valid = false;
+            urlText.setError(getString(R.string.field_required));
+        }
+        return valid;
     }
 
     private void initFields() {
@@ -108,9 +141,15 @@ public class MovieEditActivity extends BackButtonActivity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    Picasso.with(getApplicationContext())
-                            .load(urlText.getText().toString())
-                            .placeholder(R.drawable.default_image)
+                    String url = urlText.getText().toString();
+                    RequestCreator load;
+                    if (TextUtils.isEmpty(url)) {
+                        load = Picasso.with(getApplicationContext()).load(R.drawable.default_image);
+                    } else {
+                        load = Picasso.with(getApplicationContext()).load(url);
+                    }
+
+                    load.placeholder(R.drawable.default_image)
                             .error(R.drawable.default_image)
                             .into(movieImage);
                 }
@@ -119,4 +158,5 @@ public class MovieEditActivity extends BackButtonActivity {
 
 
     }
+
 }

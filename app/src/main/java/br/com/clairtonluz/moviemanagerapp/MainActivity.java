@@ -1,6 +1,9 @@
 package br.com.clairtonluz.moviemanagerapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -10,16 +13,19 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteFragment;
+import br.com.clairtonluz.moviemanagerapp.movie.MovieEditActivity;
 import br.com.clairtonluz.moviemanagerapp.movie.MovieFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final int NEW_MOVIE_REQUEST_CODE = 1;
     public static final int TAB_HOME = 0;
     public static final int TAB_FAVORITE = 1;
     private static final List<OnTabChangeListener> LISTENERS = new ArrayList<>();
@@ -94,15 +100,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == NEW_MOVIE_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            notifyFragments(TAB_HOME);
+            Snackbar.make(viewPager, "Operação realizada com sucesso", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
+    public void addAction(View view) {
+        Intent intent = new Intent(this, MovieEditActivity.class);
+        startActivityForResult(intent, NEW_MOVIE_REQUEST_CODE);
+    }
+
     private void setupTabIcons() {
         tabLayout.getTabAt(TAB_HOME).setIcon(tabIcons[TAB_HOME]);
         tabLayout.getTabAt(TAB_FAVORITE).setIcon(tabIcons[TAB_FAVORITE]);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                for (OnTabChangeListener it : LISTENERS) {
-                    it.onTabSelected(tab.getPosition());
-                }
+                notifyFragments(tab.getPosition());
             }
 
             @Override
@@ -115,6 +133,12 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void notifyFragments(int tabPosition) {
+        for (OnTabChangeListener it : LISTENERS) {
+            it.onTabSelected(tabPosition);
+        }
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -133,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     public static void removeTabListener(OnTabChangeListener onTabChangeListener) {
         LISTENERS.remove(onTabChangeListener);
     }
+
 
     public interface OnTabChangeListener {
         void onTabSelected(int position);

@@ -34,6 +34,16 @@ public class MovieDetailActivity extends BackButtonActivity {
         showMovie(movie);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            movie = (Movie) data.getSerializableExtra("movie");
+            showMovie(movie);
+            Snackbar.make(toolbarImage, "Operação realizada com sucesso", Snackbar.LENGTH_LONG).show();
+        }
+    }
+
     private void showMovie(Movie movie) {
         collapsingToolbarLayout.setTitle(movie.getName());
         Picasso.with(this)
@@ -52,15 +62,6 @@ public class MovieDetailActivity extends BackButtonActivity {
         startActivityForResult(intent, REQUEST_CODE);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            movie = (Movie) data.getSerializableExtra("movie");
-            showMovie(movie);
-            Snackbar.make(toolbarImage, "Operação realizada com sucesso", Snackbar.LENGTH_LONG).show();
-        }
-    }
 
     private void initFields() {
         toolbarImage = (ImageView) findViewById(R.id.toolbar_image);

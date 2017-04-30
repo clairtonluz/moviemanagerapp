@@ -1,25 +1,41 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="br.com.clairtonluz.moviemanagerapp.movie.MovieFragment">
 
-    <include
-        android:id="@+id/no_content"
-        layout="@layout/no_content" />
-
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/swiperefresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:scrollbars="vertical"
-            tools:listitem="@layout/movie_card" />
-    </android.support.v4.widget.SwipeRefreshLayout>
+        <include
+            android:id="@+id/no_content"
+            layout="@layout/no_content" />
 
-</FrameLayout>
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swiperefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:scrollbars="vertical"
+                tools:listitem="@layout/movie_card" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </FrameLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:onClick="addAction"
+        app:srcCompat="@drawable/ic_add_black_24dp" />
+</android.support.design.widget.CoordinatorLayout>

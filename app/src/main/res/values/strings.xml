@@ -14,5 +14,7 @@
     <string name="url_image">Url da imagem</string>
     <string name="year_lancamento">Ano de lançamento</string>
     <string name="action_save">Salvar</string>
+    <string name="registerMovie">Cadastrar filme</string>
+    <string name="field_required">Campo obrigatório</string>
 
 </resources>
