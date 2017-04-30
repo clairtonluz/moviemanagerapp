@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
 
     private int[] tabIcons = {
-            R.drawable.ic_home_black_24dp,
-            R.drawable.ic_favorite_black_24dp
+            R.drawable.ic_home_white_24dp,
+            R.drawable.ic_favorite_white_24dp
     };
 
     @Override

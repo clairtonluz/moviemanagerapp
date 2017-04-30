@@ -9,9 +9,10 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,9 @@ public class SearchResultsActivity extends BackButtonActivity {
     private RecyclerView recyclerView;
     private MoviesAdapter adapter;
     private List<Movie> movieList;
+    private TextView titleText;
     private View noContent;
+    private View loading;
     private MovieService movieService;
 
     @Override
@@ -57,7 +60,8 @@ public class SearchResultsActivity extends BackButtonActivity {
         getMenuInflater().inflate(R.menu.menu_search, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) menuItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setSubmitButtonEnabled(true);
 
@@ -67,29 +71,31 @@ public class SearchResultsActivity extends BackButtonActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
-            Log.e("QUERY", query);
-            if (TextUtils.isEmpty(query)) {
-                movieList.clear();
-                adapter.notifyDataSetChanged();
-                checkContent();
-            } else {
-                movieService.findByName(query).enqueue(new CallbackRest<List<Movie>>(this) {
-                    @Override
-                    protected void onSuccess(Call<List<Movie>> call, Response<List<Movie>> response) {
-                        movieList.clear();
-                        List<Movie> movies = response.body();
-                        movieList.addAll(movies);
-                    }
+            search(query);
+        }
+    }
 
-                    @Override
-                    protected void onComplete(Call<List<Movie>> call, boolean success) {
-                        super.onComplete(call, success);
-                        checkContent();
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-            }
+    private void search(String query) {
+        titleText.setText(String.format("Resultados para: %s", query));
+        if (TextUtils.isEmpty(query)) {
+            movieList.clear();
+            adapter.notifyDataSetChanged();
+            checkContent();
+        } else {
+            loading.setVisibility(View.VISIBLE);
+            movieService.findByName(query).enqueue(new CallbackRest<List<Movie>>(this, adapter, loading) {
+                @Override
+                protected void onSuccess(Call<List<Movie>> call, Response<List<Movie>> response) {
+                    movieList.clear();
+                    movieList.addAll(response.body());
+                }
 
+                @Override
+                protected void onComplete(Call<List<Movie>> call, boolean success) {
+                    super.onComplete(call, success);
+                    checkContent();
+                }
+            });
         }
     }
 
@@ -105,6 +111,8 @@ public class SearchResultsActivity extends BackButtonActivity {
         movieList = new ArrayList<>();
 
         noContent = findViewById(R.id.no_content);
+        loading = findViewById(R.id.loading);
+        titleText = (TextView) findViewById(R.id.title_text);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         adapter = new MoviesAdapter(movieList);
@@ -115,5 +123,4 @@ public class SearchResultsActivity extends BackButtonActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
-
 }

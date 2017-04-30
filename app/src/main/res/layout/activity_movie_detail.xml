@@ -62,6 +62,6 @@
         android:onClick="editAction"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@drawable/ic_edit_black_24dp" />
+        app:srcCompat="@drawable/ic_edit_white_24dp" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -3,6 +3,7 @@ package br.com.clairtonluz.moviemanagerapp.config.retrofit;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,6 +22,7 @@ public abstract class CallbackRest<T> implements Callback<T> {
     private final Context context;
     private final RecyclerView.Adapter adapter;
     private final SwipeRefreshLayout mSwipeRefreshLayout;
+    private View loading;
 
     public CallbackRest(Context context) {
         this(context, null, null);
@@ -30,6 +32,11 @@ public abstract class CallbackRest<T> implements Callback<T> {
         this.context = context;
         this.adapter = adapter;
         this.mSwipeRefreshLayout = mSwipeRefreshLayout;
+    }
+
+    public CallbackRest(Context context, RecyclerView.Adapter adapter, View loading) {
+        this(context, adapter, null);
+        this.loading = loading;
     }
 
     @Override
@@ -78,6 +85,9 @@ public abstract class CallbackRest<T> implements Callback<T> {
         }
         if (mSwipeRefreshLayout != null) {
             mSwipeRefreshLayout.setRefreshing(false);
+        }
+        if (loading != null) {
+            loading.setVisibility(View.GONE);
         }
     }
 }

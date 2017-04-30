@@ -52,7 +52,6 @@ public class MovieDetailActivity extends BackButtonActivity {
         showMovie(movie);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_movie_detail, menu);
@@ -117,9 +116,9 @@ public class MovieDetailActivity extends BackButtonActivity {
     private void checkFavorite() {
         if (favoriteMenu != null) {
             if (FavoriteService.isFavorite(favoriteList, movie)) {
-                favoriteMenu.setIcon(R.drawable.ic_favorite_black_24dp);
+                favoriteMenu.setIcon(R.drawable.ic_favorite_white_24dp);
             } else {
-                favoriteMenu.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                favoriteMenu.setIcon(R.drawable.ic_favorite_border_white_24dp);
             }
         }
     }

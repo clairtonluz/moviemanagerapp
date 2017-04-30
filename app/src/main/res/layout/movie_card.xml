@@ -57,7 +57,7 @@
                 android:layout_margin="@dimen/ic_movie_overflow_margin"
                 android:scaleType="centerCrop"
                 android:tint="@android:color/darker_gray"
-                app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+                app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
 
         </RelativeLayout>
 

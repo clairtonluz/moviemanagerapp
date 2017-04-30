@@ -99,11 +99,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
             holder.favorite.setVisibility(View.GONE);
         } else {
             if (FavoriteService.isFavorite(favoriteList, movie)) {
-                holder.favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                holder.favorite.setImageResource(R.drawable.ic_favorite_white_24dp);
                 holder.favorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
             } else {
                 holder.favorite.setColorFilter(null);
-                holder.favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+                holder.favorite.setImageResource(R.drawable.ic_favorite_border_white_24dp);
             }
 
             holder.favorite.setOnClickListener(new View.OnClickListener() {
