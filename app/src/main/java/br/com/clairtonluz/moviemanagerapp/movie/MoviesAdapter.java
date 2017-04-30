@@ -24,6 +24,10 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
     private final List<Favorite> favoriteList;
     private final OnFavoriteListener onFavoriteListener;
 
+    public MoviesAdapter(List<Movie> movieList) {
+        this(movieList, null, null);
+    }
+
     public MoviesAdapter(List<Movie> movieList, List<Favorite> favoriteList, OnFavoriteListener onFavoriteListener) {
         this.movieList = movieList;
         this.favoriteList = favoriteList;
@@ -63,14 +67,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
         final Context context = holder.title.getContext();
         holder.title.setText(movie.getName());
         holder.description.setText(movie.getDescription());
-
-        if (isFavorite(movie)) {
-            holder.favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
-            holder.favorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
-        } else {
-            holder.favorite.setColorFilter(null);
-            holder.favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
-        }
+        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, MovieDetailActivity.class);
+                intent.putExtra("movie", movie);
+                context.startActivity(intent);
+            }
+        });
 
         if (movie.getUrlImage() != null) {
             Uri uri = Uri.parse(movie.getUrlImage());
@@ -84,22 +88,27 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MyViewHold
                     .into(holder.thumbnail);
         }
 
-        holder.favorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Favorite favorite = getFavorite(movie);
-                onFavoriteListener.onFavorite(movie, favorite);
-            }
-        });
 
-        holder.thumbnail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, MovieDetailActivity.class);
-                intent.putExtra("movie", movie);
-                context.startActivity(intent);
+        if (favoriteList == null || onFavoriteListener == null) {
+            holder.favorite.setVisibility(View.GONE);
+        } else {
+            if (isFavorite(movie)) {
+                holder.favorite.setImageResource(R.drawable.ic_favorite_black_24dp);
+                holder.favorite.setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary));
+            } else {
+                holder.favorite.setColorFilter(null);
+                holder.favorite.setImageResource(R.drawable.ic_favorite_border_black_24dp);
             }
-        });
+
+            holder.favorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Favorite favorite = getFavorite(movie);
+                    onFavoriteListener.onFavorite(movie, favorite);
+                }
+            });
+        }
+
     }
 
     private boolean isFavorite(Movie movie) {

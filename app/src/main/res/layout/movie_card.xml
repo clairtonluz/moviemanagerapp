@@ -24,7 +24,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/suicide_squad" />
+                app:srcCompat="@drawable/default_image" />
 
             <TextView
                 android:id="@+id/title"
@@ -42,10 +42,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:paddingTop="@dimen/description_padding_top"
                 android:paddingBottom="@dimen/description_padding_bottom"
                 android:paddingLeft="@dimen/movie_title_padding"
                 android:paddingRight="@dimen/movie_title_padding"
+                android:paddingTop="@dimen/description_padding_top"
                 android:textSize="@dimen/description_text" />
 
             <ImageView

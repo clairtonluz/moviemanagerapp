@@ -4,11 +4,12 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notificações</string>
     <string name="title_favorite">Favoritos</string>
-    <string name="action_search">Pesquisar</string>
+    <string name="action_search">Buscar</string>
     <string name="action_settings">Configurações</string>
 
     <string name="title_activity_movie_detail">Filme</string>
     <string name="title_activity_movie_edit">Editar filme</string>
+    <string name="title_activity_search_results">Filmes</string>
     <string name="description">Descrição</string>
     <string name="name">Nome</string>
     <string name="url_image">Url da imagem</string>
@@ -16,5 +17,7 @@
     <string name="action_save">Salvar</string>
     <string name="registerMovie">Cadastrar filme</string>
     <string name="field_required">Campo obrigatório</string>
+    <string name="search_hint">Buscar filmes</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>
