@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 import br.com.clairtonluz.moviemanagerapp.favorite.FavoriteFragment;
+import br.com.clairtonluz.moviemanagerapp.login.AuthService;
+import br.com.clairtonluz.moviemanagerapp.login.LoginActivity;
 import br.com.clairtonluz.moviemanagerapp.movie.MovieEditActivity;
 import br.com.clairtonluz.moviemanagerapp.movie.MovieFragment;
 
@@ -64,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         // Associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -73,6 +76,18 @@ public class MainActivity extends AppCompatActivity {
         searchView.setSubmitButtonEnabled(true);
 
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout:
+                logout();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override
@@ -87,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
     public void addAction(View view) {
         Intent intent = new Intent(this, MovieEditActivity.class);
         startActivityForResult(intent, NEW_MOVIE_REQUEST_CODE);
+    }
+
+    private void logout() {
+        new AuthService(this).logout();
     }
 
     private void setupTabIcons() {
@@ -104,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
     }

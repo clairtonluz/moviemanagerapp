@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.clairtonluz.moviemanagerapp.util.Constants;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,20 +64,22 @@ public abstract class CallbackRest<T> implements Callback<T> {
     protected void onUnsuccess(Call<T> call, Response<T> response) {
         ResponseBody errorBody = response.errorBody();
         String message;
-        if (errorBody != null) {
-            try {
-                ErrorRest error = new ObjectMapper().readValue(errorBody.string(), ErrorRest.class);
-                message = error.message;
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (response.code() != Constants.HTTP_STATUS_UNAUTHORIZED) {
+            if (errorBody != null) {
+                try {
+                    ErrorRest error = new ObjectMapper().readValue(errorBody.string(), ErrorRest.class);
+                    message = error.message;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    message = String.format("%d - %s", response.code(), response.message());
+                }
+
+            } else {
                 message = String.format("%d - %s", response.code(), response.message());
             }
 
-        } else {
-            message = String.format("%d - %s", response.code(), response.message());
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         }
-
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 
     protected void onComplete(Call<T> call, boolean success) {

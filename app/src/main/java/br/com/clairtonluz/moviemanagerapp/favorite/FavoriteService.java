@@ -6,6 +6,8 @@ import java.util.List;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 import br.com.clairtonluz.moviemanagerapp.movie.Movie;
+import br.com.clairtonluz.moviemanagerapp.util.Constants;
+import br.com.clairtonluz.moviemanagerapp.util.StoreUtil;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 
@@ -13,7 +15,8 @@ public class FavoriteService {
     private FavoriteRest favoriteRest;
 
     public FavoriteService(Context context) {
-        this.favoriteRest = RestFactory.createService(context, FavoriteRest.class, "admin", "admin");
+        String token = StoreUtil.get(context, Constants.AUTHORIZATION);
+        this.favoriteRest = RestFactory.createService(context, FavoriteRest.class, token);
     }
 
     public Call<List<Favorite>> list() {

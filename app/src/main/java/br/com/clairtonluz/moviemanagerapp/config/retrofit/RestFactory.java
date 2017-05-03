@@ -26,16 +26,21 @@ public class RestFactory {
         return builder;
     }
 
-    public static <S> S createService(Context context, Class<S> serviceClass, String username, String password) {
+    public static <S> S createService(Context context, Class<S> serviceClass) {
+        return createService(context, serviceClass, null);
+    }
+
+    public static <S> S createService(Context context, Class<S> serviceClass, String authorization) {
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        if (username != null && password != null) {
-            httpClient.addInterceptor(new BasicAuthInterceptor(username, password));
+        if (authorization != null) {
+            httpClient.addInterceptor(new BasicAuthInterceptor(authorization));
         }
 
         OkHttpClient client = httpClient.cache(getCache())
                 .addNetworkInterceptor(new RewriteResponseInterceptor())
                 .addInterceptor(new RewriteResponseOffilineInterceptor(context))
                 .addInterceptor(new LogInterceptor())
+                .addInterceptor(new CheckAuthInterceptor(context))
                 .retryOnConnectionFailure(true)
                 .build();
 

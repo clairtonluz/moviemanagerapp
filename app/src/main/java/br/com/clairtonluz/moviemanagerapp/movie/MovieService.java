@@ -7,13 +7,16 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
+import br.com.clairtonluz.moviemanagerapp.util.Constants;
+import br.com.clairtonluz.moviemanagerapp.util.StoreUtil;
 import retrofit2.Call;
 
 public class MovieService {
     private MovieRest movieRest;
 
     public MovieService(Context context) {
-        this.movieRest = RestFactory.createService(context, MovieRest.class, "admin", "admin");
+        String token = StoreUtil.get(context, Constants.AUTHORIZATION);
+        this.movieRest = RestFactory.createService(context, MovieRest.class, token);
     }
 
     public Call<List<Movie>> list() {
