@@ -23,3 +23,7 @@ ou
 
 **Senha:** admin
 
+App
+---
+
+![alt text](https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/1.jpeg)
