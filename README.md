@@ -26,4 +26,4 @@ ou
 App
 ---
 
-![alt text](https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/1.jpeg =250x)
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/1.jpeg" width="200">
