@@ -26,4 +26,9 @@ ou
 App
 ---
 
-![alt text](https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/1.jpeg)
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/1.jpeg" width="200">
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/2.jpeg" width="200">
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/3.jpeg" width="200">
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/4.jpeg" width="200">
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/5.jpeg" width="200">
+<img src="https://raw.githubusercontent.com/clairtonluz/moviemanagerapp/master/docs/6.jpeg" width="200">
