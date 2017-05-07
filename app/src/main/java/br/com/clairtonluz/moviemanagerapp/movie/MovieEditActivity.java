@@ -19,6 +19,7 @@ import br.com.clairtonluz.moviemanagerapp.generic.BackButtonActivity;
 import br.com.clairtonluz.moviemanagerapp.util.Constants;
 import br.com.clairtonluz.moviemanagerapp.util.ExtraUtil;
 import fr.ganfra.materialspinner.MaterialSpinner;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -32,6 +33,7 @@ public class MovieEditActivity extends BackButtonActivity {
 
     private MovieService movieService;
     private ImageView movieImage;
+    private MenuItem menuDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,14 @@ public class MovieEditActivity extends BackButtonActivity {
         showMovie(movie);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_movie_edit, menu);
+
+        menuDelete = menu.findItem(R.id.action_delete);
+
+        if (movie != null)
+            menuDelete.setVisible(movie.getId() != null);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -60,6 +66,9 @@ public class MovieEditActivity extends BackButtonActivity {
         switch (item.getItemId()) {
             case R.id.action_save:
                 save();
+                return true;
+            case R.id.action_delete:
+                delete();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -78,6 +87,9 @@ public class MovieEditActivity extends BackButtonActivity {
         int position = Constants.getYEARS().indexOf(movie.getYear()) + 1;
         yearSpinner.setSelection(position);
         urlText.setText(movie.getUrlImage());
+
+        if (menuDelete != null)
+            menuDelete.setVisible(movie.getId() != null);
     }
 
     public void save() {
@@ -95,6 +107,18 @@ public class MovieEditActivity extends BackButtonActivity {
                     Intent intent = new Intent();
                     intent.putExtra("movie", movie);
                     setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
+    }
+
+    public void delete() {
+        if (movie.getId() != null) {
+            movieService.delete(movie.getId()).enqueue(new CallbackRest<ResponseBody>(this) {
+                @Override
+                protected void onSuccess(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    setResult(RESULT_OK, new Intent());
                     finish();
                 }
             });

@@ -9,6 +9,7 @@ import java.util.Map;
 import br.com.clairtonluz.moviemanagerapp.config.retrofit.RestFactory;
 import br.com.clairtonluz.moviemanagerapp.util.Constants;
 import br.com.clairtonluz.moviemanagerapp.util.StoreUtil;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 
 public class MovieService {
@@ -35,9 +36,14 @@ public class MovieService {
         }
     }
 
+    public Call<ResponseBody> delete(Integer id) {
+        return movieRest.delete(id);
+    }
+
     public Call<List<Movie>> findByName(String name) {
         Map<String, String> data = new HashMap<>();
         data.put("name", name);
         return movieRest.query(data);
     }
+
 }

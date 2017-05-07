@@ -77,8 +77,12 @@ public class MovieDetailActivity extends BackButtonActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             movie = (Movie) data.getSerializableExtra("movie");
-            showMovie(movie);
-            Snackbar.make(toolbarImage, R.string.message_sucesso, Snackbar.LENGTH_LONG).show();
+            if (movie != null) {
+                showMovie(movie);
+                Snackbar.make(toolbarImage, R.string.message_sucesso, Snackbar.LENGTH_LONG).show();
+            } else {
+                finish();
+            }
         }
     }
 

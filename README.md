@@ -11,9 +11,15 @@ url onde se encontra servidor que está executando o backend
 
 Credenciais padrão
 ==================
-Esse usuário padrão é configurado no backend.
+Esse usuário padrão configurado no backend.
 
 **Usuário:** admin
+
+**Senha:** admin
+
+ou
+
+**Usuário:** clairton
 
 **Senha:** admin
 
